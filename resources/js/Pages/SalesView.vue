@@ -10,8 +10,8 @@ const tableContent = [
 </script>
 
 <template>
-  <Head title="Sales" />
   <LayoutSales>
+    <Head title="Sales" />
     <CardBox has-table>
       <table class="whitespace-nowrap">
         <thead>
