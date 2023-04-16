@@ -3,36 +3,26 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('HomeView');
-    })->name('dashboard');
-    
-    Route::get('/tables', function () {
-        return Inertia::render('TablesView');
-    })->name('tables');
+Route::middleware(['auth', 'verified'])
+    ->prefix('/dashboard')
+    ->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('HomeView');
+        })->name('dashboard');
 
-    Route::get('/forms', function () {
-        return Inertia::render('FormsView');
-    })->name('forms');
+        Route::get('/tables', function () {
+            return Inertia::render('TablesView');
+        })->name('tables');
 
-    Route::get('/ui', function () {
-        return Inertia::render('UiView');
-    })->name('ui');
+        Route::get('/forms', function () {
+            return Inertia::render('FormsView');
+        })->name('forms');
 
-    Route::get('/responsive', function () {
-        return Inertia::render('ResponsiveView');
-    })->name('responsive');
+        Route::get('/ui', function () {
+            return Inertia::render('UiView');
+        })->name('ui');
 
-    Route::get('/', function () {
-        return Inertia::render('StyleView');
-    })->name('styles');
-
-    Route::get('/profile', function () {
-        return Inertia::render('ProfileView');
-    })->name('profile');
-
-    Route::get('/error', function () {
-        return Inertia::render('ErrorView');
-    })->name('error');
-});
+        Route::get('/profile', function () {
+            return Inertia::render('ProfileView');
+        })->name('profile');
+    });

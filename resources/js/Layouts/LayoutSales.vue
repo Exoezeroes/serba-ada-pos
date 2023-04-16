@@ -1,0 +1,15 @@
+<script setup>
+import { useStyleStore } from "@/Stores/style.js";
+
+const styleStore = useStyleStore();
+</script>
+
+<template>
+  <div :class="{ dark: styleStore.darkMode }">
+    <div
+      class="min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100"
+    >
+      <slot />
+    </div>
+  </div>
+</template>

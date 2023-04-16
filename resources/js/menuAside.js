@@ -5,6 +5,7 @@ import {
   mdiTable,
   mdiViewList,
   mdiTelevisionGuide,
+  mdiBarcodeScan,
 } from "@mdi/js";
 
 export default [
@@ -32,6 +33,11 @@ export default [
     route: "profile",
     label: "Profile",
     icon: mdiAccountCircle,
+  },
+  {
+    route: "sales",
+    label: "Sales",
+    icon: mdiBarcodeScan,
   },
   // {
   //   label: "Dropdown",
