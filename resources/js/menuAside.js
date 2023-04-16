@@ -6,6 +6,8 @@ import {
   mdiViewList,
   mdiTelevisionGuide,
   mdiBarcodeScan,
+  mdiDatabase,
+  mdiPackage
 } from "@mdi/js";
 
 export default [
@@ -13,6 +15,23 @@ export default [
     route: "dashboard",
     icon: mdiMonitor,
     label: "Dashboard",
+  },
+  {
+    label: "Database",
+    icon: mdiDatabase,
+    menu: [
+      {
+        route: "product.index",
+        label: "Products",
+        icon: mdiPackage,
+      },
+    ],
+  },
+
+  {
+    route: "sales",
+    label: "Sales",
+    icon: mdiBarcodeScan,
   },
   {
     route: "tables",
@@ -34,21 +53,4 @@ export default [
     label: "Profile",
     icon: mdiAccountCircle,
   },
-  {
-    route: "sales",
-    label: "Sales",
-    icon: mdiBarcodeScan,
-  },
-  // {
-  //   label: "Dropdown",
-  //   icon: mdiViewList,
-  //   menu: [
-  //     {
-  //       label: "Item One",
-  //     },
-  //     {
-  //       label: "Item Two",
-  //     },
-  //   ],
-  // },
 ];

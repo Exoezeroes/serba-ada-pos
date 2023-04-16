@@ -25,7 +25,24 @@ const asideMenuItemActiveStyle = computed(() =>
   hasColor.value ? "" : styleStore.asideMenuItemActiveStyle
 );
 
-const isDropdownActive = ref(false);
+const isLocalStorageAvailable = computed(function () {
+  var test = "test";
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+});
+
+const storageItem = isLocalStorageAvailable
+  ? localStorage.getItem(`${props.item.label}Active`)
+  : null;
+
+const boolean = storageItem === "true"; // null === "true" <=> false
+
+const isDropdownActive = ref(boolean);
 
 const componentClass = computed(() => [
   props.isDropdownList ? "py-3 px-6 text-sm" : "py-3",

@@ -1,6 +1,6 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import menuAside from "@/menuAside.js";
 import menuNavBar from "@/menuNavBar.js";
@@ -34,6 +34,34 @@ router.on("navigate", () => {
 const menuClick = (event, item) => {
   if (item.isToggleLightDark) {
     styleStore.setDarkMode();
+  }
+
+  const isLocalStorageAvailable = computed(function () {
+    var test = "test";
+    try {
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  });
+
+  if (isLocalStorageAvailable && item.menu) {
+    // example: DatabaseActive
+    const label = `${item.label}Active`;
+
+    // string or null
+    let storageItem = localStorage.getItem(label);
+
+    if (storageItem !== null) {
+      // convert string to boolean
+      const boolean = storageItem.toLowerCase() === "true";
+
+      localStorage.setItem(label, !boolean);
+    } else {
+      localStorage.setItem(label, true);
+    }
   }
 
   if (item.isLogout) {
