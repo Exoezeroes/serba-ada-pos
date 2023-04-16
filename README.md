@@ -41,3 +41,5 @@ php artisan storage:link
 1. run `npm run dev` for development or `npm run build` for production
 2. run `php artisan serve` to serve
 3. visit `localhost` in your browser
+<hr>
+Shout out to https://github.com/justboil/admin-one-vue-tailwind
