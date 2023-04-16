@@ -13,7 +13,7 @@ const appName = "SerbaAda";
 const pinia = createPinia();
 
 createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
+  title: (title) => `${appName}: ${title}`,
   resolve: (name) =>
     resolvePageComponent(
       `./Pages/${name}.vue`,
