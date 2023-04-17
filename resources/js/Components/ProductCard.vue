@@ -20,6 +20,7 @@ const emit = defineEmits(["clicked"]);
   >
     <ProductItem
       :uid="product.uid"
+      :title="product.title"
       :quantity="product.quantity"
       :price="product.price"
     />
