@@ -59,6 +59,12 @@ const computedValue = computed({
   },
 });
 
+const verify = () => {
+  if (props.inputmode === "numeric" && props.type === "text") {
+    // only allow number from 0 ~ 9
+    emit("update:modelValue", props.modelValue.replace(/[^0-9]/g, ''))
+  };
+};
 const inputElClass = computed(() => {
   const base = [
     "px-3 py-2 max-w-full focus:ring focus:outline-none border-gray-700 rounded w-full",
@@ -165,6 +171,7 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
+      @input="verify()"
     />
     <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
   </div>

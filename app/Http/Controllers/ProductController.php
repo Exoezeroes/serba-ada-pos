@@ -17,4 +17,11 @@ class ProductController extends Controller
             'products' => $products,
         ]);
     }
+
+    /**
+     * Show create product form
+     */
+    public function create() {
+        return Inertia::render('Product/CreateView');
+    }
 }

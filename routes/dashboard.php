@@ -11,8 +11,7 @@ Route::middleware(['auth', 'verified'])
             return Inertia::render('HomeView');
         })->name('dashboard');
 
-        Route::get('/products', [ProductController::class, 'index'])
-            ->name('product.index');
+        require __DIR__ . '/product.php';
 
         Route::get('/tables', function () {
             return Inertia::render('TablesView');
