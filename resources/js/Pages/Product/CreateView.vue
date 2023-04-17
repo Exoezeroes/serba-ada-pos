@@ -62,6 +62,7 @@ const submit = () => {
             :icon="mdiNumeric"
             inputmode="numeric"
             type="number"
+            min="1"
             placeholder="1"
             required
           />

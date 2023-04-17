@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  min: {
+    type: String,
+    default: null,
+  },
   maxlength: {
     type: String,
     default: null,
@@ -65,6 +69,7 @@ const verify = () => {
     emit("update:modelValue", props.modelValue.replace(/[^0-9]/g, ''))
   };
 };
+
 const inputElClass = computed(() => {
   const base = [
     "px-3 py-2 max-w-full focus:ring focus:outline-none border-gray-700 rounded w-full",
@@ -164,6 +169,7 @@ if (props.ctrlKFocus) {
       ref="inputEl"
       v-model="computedValue"
       :name="name"
+      :min="min"
       :maxlength="maxlength"
       :inputmode="inputmode"
       :autocomplete="autocomplete"
