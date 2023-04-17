@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -11,7 +11,8 @@ class ProductController extends Controller
     /**
      * Show all products in the database
      */
-    public function index() {
+    public function index()
+    {
         $products = Product::all();
         return Inertia::render('Product/HomeView', [
             'products' => $products,
@@ -21,7 +22,24 @@ class ProductController extends Controller
     /**
      * Show create product form
      */
-    public function create() {
+    public function create()
+    {
         return Inertia::render('Product/CreateView');
+    }
+
+    /**
+     * Store a created product
+     */
+    public function store(ProductRequest $request)
+    {
+        $product = $request->validated();
+        
+        Product::create($product);
+
+        return to_route('product.index')
+            ->with([
+                'type' => 'success',
+                'message' => 'Product added successfully'
+            ]);
     }
 }
