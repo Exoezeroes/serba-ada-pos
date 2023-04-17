@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index() {
         $products = Product::all();
-        return Inertia::render('ProductView', [
+        return Inertia::render('Product/HomeView', [
             'products' => $products,
         ]);
     }

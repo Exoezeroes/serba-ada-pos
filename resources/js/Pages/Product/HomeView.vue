@@ -7,6 +7,7 @@ import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import ProductCard from "@/Components/ProductCard.vue";
 import ProductModal from "@/Components/ProductModal.vue";
+import BaseButton from "@/Components/BaseButton.vue";
 
 const props = defineProps({
   products: {
@@ -26,8 +27,15 @@ productStore.products = props.products;
     <ProductModal />
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiGridLarge" title="Items" main />
+      <BaseButton
+        routeName="product.create"
+        label="Add Product"
+        color="success"
+        outline
+        rounded-full
+      />
       <div
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 text-xs md:text-md lg:text-base gap-2 lg:grid-cols-5"
+        class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 text-xs md:text-md lg:text-base gap-2 lg:grid-cols-5"
       >
         <ProductCard
           v-for="(product, index) in productStore.products"
