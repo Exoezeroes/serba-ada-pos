@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  max: {
+    type: String,
+    default: null,
+  },
   maxlength: {
     type: String,
     default: null,
@@ -170,6 +174,7 @@ if (props.ctrlKFocus) {
       v-model="computedValue"
       :name="name"
       :min="min"
+      :max="max"
       :maxlength="maxlength"
       :inputmode="inputmode"
       :autocomplete="autocomplete"

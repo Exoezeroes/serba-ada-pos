@@ -14,7 +14,7 @@ const props = defineProps({
   outline: Boolean,
   color: {
     type: String,
-    required: true,
+    default: "info",
   },
 });
 

@@ -15,6 +15,7 @@ import BaseButtons from "@/Components/BaseButtons.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
+import FormValidationErrors from "@/Components/FormValidationErrors.vue";
 
 const form = useForm({
   uid: "",
@@ -24,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post("");
+  form.post(route("product.store"));
 };
 </script>
 
@@ -38,6 +39,7 @@ const submit = () => {
         main
       />
       <CardBox isForm @submit.prevent="submit">
+        <FormValidationErrors message="Something went wrong..." />
         <FormField label="UID" help="EAN-8 or EAN-13.">
           <FormControl
             v-model="form.uid"
@@ -48,7 +50,7 @@ const submit = () => {
             required
           />
         </FormField>
-        <FormField label="Name">
+        <FormField label="Title" help="Literal text">
           <FormControl
             v-model="form.title"
             :icon="mdiFormatLetterCase"
@@ -56,22 +58,28 @@ const submit = () => {
             required
           />
         </FormField>
-        <FormField label="Stock">
+        <FormField label="Quantity" help="Positive number up to 4,294,967,295">
           <FormControl
             v-model="form.quantity"
             :icon="mdiNumeric"
             inputmode="numeric"
             type="number"
             min="1"
+            max="4294967295"
             placeholder="1"
             required
           />
         </FormField>
-        <FormField label="Price" help="Full price, e.g. 125000">
+        <FormField
+          label="Price"
+          help="Full price, e.g. 125,000. Positive number up to 4,294,967,295"
+        >
           <FormControl
             v-model="form.price"
             :icon="mdiCash"
             type="number"
+            min="1"
+            max="4294967295"
             inputmode="numeric"
             placeholder="1000"
             required
