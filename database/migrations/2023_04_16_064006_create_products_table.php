@@ -12,15 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
+            $table->id();
             $table->string('uid');
             $table->string('title');
-            $table->integer('quantity');
-            $table->integer('price');
+            $table->unsignedInteger('quantity'); // max 4,294,967,295
+            $table->unsignedInteger('price');    // same
             $table->timestamps();
         });
 
         Schema::table('products', function (Blueprint $table) {
-            $table->primary('uid');
+            $table->unique(['uid', 'price']);
         });
     }
 
