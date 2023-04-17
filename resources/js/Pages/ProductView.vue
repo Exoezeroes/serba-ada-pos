@@ -16,6 +16,8 @@ const props = defineProps({
 });
 
 const productStore = useProductStore();
+
+productStore.products = props.products;
 </script>
 
 <template>
@@ -28,7 +30,7 @@ const productStore = useProductStore();
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 text-xs md:text-md lg:text-base gap-2 lg:grid-cols-5"
       >
         <ProductCard
-          v-for="(product, index) in products"
+          v-for="(product, index) in productStore.products"
           :key="index"
           :product="product"
           @clicked="productStore.openModal(product)"

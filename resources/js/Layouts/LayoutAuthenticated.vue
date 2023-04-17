@@ -47,7 +47,7 @@ const menuClick = (event, item) => {
     }
   });
 
-  if (isLocalStorageAvailable && item.menu) {
+  if (item.label && isLocalStorageAvailable && item.menu) {
     // example: DatabaseActive
     const label = `${item.label}Active`;
 
