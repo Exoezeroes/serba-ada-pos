@@ -21,6 +21,10 @@ const props = defineProps({
     default: "Done",
   },
   hasCancel: Boolean,
+  buttonCancel: {
+    type: String,
+    default: "danger",
+  },
   modelValue: {
     type: [String, Number, Boolean],
     default: null,
@@ -78,7 +82,7 @@ window.addEventListener("keydown", (e) => {
           <BaseButton
             v-if="hasCancel"
             label="Cancel"
-            :color="button"
+            :color="buttonCancel"
             outline
             @click="cancel"
           />
