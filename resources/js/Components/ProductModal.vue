@@ -8,6 +8,7 @@ import CardBoxModal from "@/Components/CardBoxModal.vue";
 import ProductModalTable from "./ProductModalTable.vue";
 
 const productStore = useProductStore();
+const closeModal = () => (productStore.modalActive = false);
 </script>
 
 <template>
@@ -16,11 +17,13 @@ const productStore = useProductStore();
     :title="productStore.productActive.title"
   >
     <BaseButtons type="justify-between">
-      <BaseButton
+      <LinkButton
         :icon="mdiPencil"
         color="warning"
         outline
         :href="route('product.edit', productStore.productActive)"
+        as="button"
+        @click.prevent="closeModal"
       />
 
       <BaseButton :icon="mdiDelete" color="danger" outline />
