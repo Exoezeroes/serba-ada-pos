@@ -1,15 +1,10 @@
 <script setup>
 import {
-  mdiAlertCircleOutline,
-  mdiCheckCircleOutline,
-  mdiCloseCircleOutline,
-  mdiGridLarge,
-  mdiPlusCircleOutline,
+  mdiRecycle,
   mdiTrashCan,
 } from "@mdi/js";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
-import { computed } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -27,18 +22,6 @@ const props = defineProps({
   },
 });
 
-const type = computed(() => usePage().props.response.type);
-const message = computed(() => usePage().props.response.message);
-const icon = computed(() => {
-  if (type.value === "success") {
-    return mdiCheckCircleOutline;
-  }
-  if (type.value === "danger") {
-    return mdiCloseCircleOutline;
-  }
-  return mdiAlertCircleOutline;
-});
-
 const productStore = useProductStore();
 
 productStore.products = props.products;
@@ -46,10 +29,10 @@ productStore.products = props.products;
 
 <template>
   <LayoutAuthenticated>
-    <Head title="Products" />
-    <ProductModal canEdit canDelete />
+    <Head title="Trashed Products" />
+    <ProductModal />
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiGridLarge" title="Products" main />
+      <SectionTitleLineWithButton :icon="mdiRecycle" title="Trashed Products" main />
       <NotificationBar
         v-if="message"
         :color="type"
@@ -59,20 +42,14 @@ productStore.products = props.products;
         {{ message }}
       </NotificationBar>
       <BaseButtons>
-        <BaseButton
-          routeName="product.create"
-          :icon="mdiPlusCircleOutline"
-          label="Add Product"
-          color="success"
-          outline
-        />
         <SortButton />
         <BaseButton
-          routeName="product.trash"
+          routeName="product.index"
           :icon="mdiTrashCan"
           label="Trashed"
           color="danger"
           outline
+          active
         />
       </BaseButtons>
       <div

@@ -7,9 +7,17 @@ import CardBox from "@/Components/CardBox.vue";
 import CardBoxModal from "@/Components/CardBoxModal.vue";
 import ProductModalTable from "./ProductModalTable.vue";
 
+const props = defineProps({
+  canEdit: Boolean,
+  canDelete: Boolean,
+})
+
+props.canEdit = props.canEdit ? true : false;
+props.canDelete = props.canDelete ? true : false;
+
 const productStore = useProductStore();
 
-const ActiveProduct = productStore.productActive
+const ActiveProduct = productStore.productActive;
 </script>
 
 <template>
@@ -19,20 +27,22 @@ const ActiveProduct = productStore.productActive
   >
     <BaseButtons type="justify-between">
       <LinkButton
+        v-if="canEdit"
+        :href="route('product.edit', ActiveProduct)"
         :icon="mdiPencil"
         color="warning"
-        outline
-        :href="route('product.edit', ActiveProduct)"
         as="button"
+        outline
         @click.prevent="productStore.closeModal"
       />
       <LinkButton
+        v-if="canDelete"
+        :href="route('product.destroy', ActiveProduct)"
+        method="delete"
         :icon="mdiDelete"
         color="danger"
-        outline
-        :href="route('product.destroy', ActiveProduct)"
         as="button"
-        method="delete"
+        outline
         @click.prevent="productStore.deleteProduct(ActiveProduct)"
       />
     </BaseButtons>

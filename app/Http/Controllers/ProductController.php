@@ -21,6 +21,18 @@ class ProductController extends Controller
     }
 
     /**
+     * Show all soft deleted products
+     */
+    public function trash()
+    {
+        $products = Product::onlyTrashed()->get();
+
+        return Inertia::render('Product/TrashView', [
+            'products' => $products,
+        ]);
+    }
+
+    /**
      * Show create product form
      */
     public function create()
