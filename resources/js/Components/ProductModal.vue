@@ -20,12 +20,10 @@ const productStore = useProductStore();
         :icon="mdiPencil"
         color="warning"
         outline
+        :href="route('product.edit', productStore.productActive)"
       />
-      <BaseButton
-        :icon="mdiDelete"
-        color="danger"
-        outline
-      />
+
+      <BaseButton :icon="mdiDelete" color="danger" outline />
     </BaseButtons>
     <CardBox has-table>
       <ProductModalTable :product="productStore.productActive" />

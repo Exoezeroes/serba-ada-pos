@@ -56,6 +56,7 @@ const props = defineProps({
   borderless: Boolean,
   transparent: Boolean,
   ctrlKFocus: Boolean,
+  disabled: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "setRef"]);
@@ -70,8 +71,8 @@ const computedValue = computed({
 const verify = () => {
   if (props.inputmode === "numeric" && props.type === "text") {
     // only allow number from 0 ~ 9
-    emit("update:modelValue", props.modelValue.replace(/[^0-9]/g, ''))
-  };
+    emit("update:modelValue", props.modelValue.replace(/[^0-9]/g, ""));
+  }
 };
 
 const inputElClass = computed(() => {
@@ -81,6 +82,9 @@ const inputElClass = computed(() => {
     computedType.value === "textarea" ? "h-24" : "h-12",
     props.borderless ? "border-0" : "border",
     props.transparent ? "bg-transparent" : "bg-white dark:bg-slate-800",
+    props.disabled
+      ? "cursor-not-allowed bg-gray-300/50 dark:bg-slate-900/50 text-gray-400 dark:text-gray-600"
+      : "cursor-auto",
   ];
 
   if (props.icon) {
@@ -182,6 +186,7 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
+      :disabled="disabled"
       @input="verify()"
     />
     <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />

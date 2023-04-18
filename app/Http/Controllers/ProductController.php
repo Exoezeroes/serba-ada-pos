@@ -42,4 +42,14 @@ class ProductController extends Controller
                 'message' => 'Product added successfully'
             ]);
     }
+
+    /**
+     * Show edit product form
+     */
+    public function edit(Product $product)
+    {
+        return Inertia::render('Product/EditView', [
+            'product' => $product
+        ]);
+    }
 }
