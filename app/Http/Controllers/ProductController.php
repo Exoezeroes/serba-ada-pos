@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Inertia\Inertia;
 
@@ -30,7 +30,7 @@ class ProductController extends Controller
     /**
      * Store a created product
      */
-    public function store(ProductRequest $request)
+    public function store(ProductStoreRequest $request)
     {
         $product = $request->validated();
         
