@@ -1,11 +1,12 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/vue3";
 import {
+  mdiArrowUpBoldBoxOutline,
+  mdiArrowDownBoldBoxOutline,
   mdiBallotOutline,
   mdiBarcode,
   mdiFormatLetterCase,
   mdiNumeric,
-  mdiCash,
 } from "@mdi/js";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
@@ -21,7 +22,8 @@ const form = useForm({
   uid: "",
   title: "",
   quantity: "",
-  price: "",
+  buy_price: "",
+  sell_price: "",
 });
 
 const submit = () => {
@@ -40,7 +42,7 @@ const submit = () => {
       />
       <CardBox isForm @submit.prevent="submit">
         <FormValidationErrors message="Something went wrong..." />
-        <FormField label="UID" help="EAN-8 or EAN-13.">
+        <FormField label="UID" help="EAN-8 or EAN-13">
           <FormControl
             v-model="form.uid"
             :icon="mdiBarcode"
@@ -50,7 +52,7 @@ const submit = () => {
             required
           />
         </FormField>
-        <FormField label="Title" help="Literal text">
+        <FormField label="Title">
           <FormControl
             v-model="form.title"
             :icon="mdiFormatLetterCase"
@@ -66,22 +68,32 @@ const submit = () => {
             type="number"
             min="1"
             max="4294967295"
-            placeholder="1"
+            placeholder="Quantity"
             required
           />
         </FormField>
         <FormField
-          label="Price"
-          help="Full price, e.g. 125,000. Positive number up to 4,294,967,295"
+          label="Buy / Sell Price"
+          help="Full price per unit, e.g. 125,000"
         >
           <FormControl
-            v-model="form.price"
-            :icon="mdiCash"
+            v-model="form.buy_price"
+            :icon="mdiArrowDownBoldBoxOutline"
             type="number"
             min="1"
             max="4294967295"
             inputmode="numeric"
-            placeholder="1000"
+            placeholder="Buy Price"
+            required
+          />
+          <FormControl
+            v-model="form.sell_price"
+            :icon="mdiArrowUpBoldBoxOutline"
+            type="number"
+            min="1"
+            max="4294967295"
+            inputmode="numeric"
+            placeholder="Sell Price"
             required
           />
         </FormField>

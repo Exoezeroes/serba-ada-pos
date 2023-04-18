@@ -12,7 +12,8 @@ const props = defineProps({
     <thead>
       <th>Barcode</th>
       <th>Quantity</th>
-      <th>Price</th>
+      <th>Buy Price</th>
+      <th>Sell Price</th>
     </thead>
     <tbody>
       <tr>
@@ -22,8 +23,11 @@ const props = defineProps({
         <td data-label="Quantity">
           {{ product.quantity }}
         </td>
-        <td data-label="Price">
-          {{ product.price }}
+        <td data-label="Buy Price">
+          {{ product.buy_price }}
+        </td>
+        <td data-label="Sell Price">
+          {{ product.sell_price }}
         </td>
       </tr>
     </tbody>

@@ -19,10 +19,7 @@ const emit = defineEmits(["clicked"]);
     @click="emit('clicked', product)"
   >
     <ProductItem
-      :uid="product.uid"
-      :title="product.title"
-      :quantity="product.quantity"
-      :price="product.price"
+      :product="product"
     />
   </CardBox>
 </template>
