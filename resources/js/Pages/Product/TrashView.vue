@@ -1,10 +1,14 @@
 <script setup>
 import {
+  mdiAlertCircleOutline,
+  mdiCheckCircleOutline,
+  mdiCloseCircleOutline,
   mdiRecycle,
   mdiTrashCan,
 } from "@mdi/js";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
+import { computed } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -22,6 +26,18 @@ const props = defineProps({
   },
 });
 
+const type = computed(() => usePage().props.response.type);
+const message = computed(() => usePage().props.response.message);
+const icon = computed(() => {
+  if (type.value === "success") {
+    return mdiCheckCircleOutline;
+  }
+  if (type.value === "danger") {
+    return mdiCloseCircleOutline;
+  }
+  return mdiAlertCircleOutline;
+});
+
 const productStore = useProductStore();
 
 productStore.products = props.products;
@@ -30,9 +46,13 @@ productStore.products = props.products;
 <template>
   <LayoutAuthenticated>
     <Head title="Trashed Products" />
-    <ProductModal />
+    <ProductModal hasCancel buttonLabel="Restore" />
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiRecycle" title="Trashed Products" main />
+      <SectionTitleLineWithButton
+        :icon="mdiRecycle"
+        title="Trashed Products"
+        main
+      />
       <NotificationBar
         v-if="message"
         :color="type"
@@ -59,6 +79,7 @@ productStore.products = props.products;
           v-for="(product, index) in productStore.products"
           :key="index"
           :product="product"
+          class="text-red-500/75"
           @clicked="productStore.openModal(product)"
         />
       </div>

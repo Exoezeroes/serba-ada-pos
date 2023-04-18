@@ -10,10 +10,21 @@ import ProductModalTable from "./ProductModalTable.vue";
 const props = defineProps({
   canEdit: Boolean,
   canDelete: Boolean,
-})
+  button: {
+    type: String,
+    default: "info",
+  },
+  buttonLabel: {
+    type: String,
+    default: "Done",
+  },
+  hasCancel: Boolean,
+});
 
-props.canEdit = props.canEdit ? true : false;
-props.canDelete = props.canDelete ? true : false;
+const emit = defineEmits(["confirm"]);
+
+const editable = props.canEdit ? true : false;
+const deletable = props.canDelete ? true : false;
 
 const productStore = useProductStore();
 
@@ -24,10 +35,14 @@ const ActiveProduct = productStore.productActive;
   <CardBoxModal
     v-model="productStore.modalActive"
     :title="ActiveProduct.title"
+    :button="button"
+    :buttonLabel="buttonLabel"
+    :hasCancel="hasCancel"
+    @confirm="emit('confirm')"
   >
     <BaseButtons type="justify-between">
       <LinkButton
-        v-if="canEdit"
+        v-if="editable"
         :href="route('product.edit', ActiveProduct)"
         :icon="mdiPencil"
         color="warning"
@@ -36,7 +51,7 @@ const ActiveProduct = productStore.productActive;
         @click.prevent="productStore.closeModal"
       />
       <LinkButton
-        v-if="canDelete"
+        v-if="deletable"
         :href="route('product.destroy', ActiveProduct)"
         method="delete"
         :icon="mdiDelete"
