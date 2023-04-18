@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('buy_price');
             $table->unsignedInteger('sell_price');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table('products', function (Blueprint $table) {
