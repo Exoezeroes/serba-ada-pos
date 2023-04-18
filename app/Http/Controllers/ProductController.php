@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use Inertia\Inertia;
 
@@ -13,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::query()->get();
         return Inertia::render('Product/HomeView', [
             'products' => $products,
         ]);
@@ -32,15 +33,13 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        $product = $request->validated();
-        
-        Product::create($product);
+        Product::query()
+            ->create($request->validated());
 
-        return to_route('product.index')
-            ->with([
-                'type' => 'success',
-                'message' => 'Product added successfully'
-            ]);
+        return to_route('product.index')->with([
+            'type' => 'success',
+            'message' => 'Product added successfully'
+        ]);
     }
 
     /**
@@ -50,6 +49,21 @@ class ProductController extends Controller
     {
         return Inertia::render('Product/EditView', [
             'product' => $product
+        ]);
+    }
+
+    /**
+     * Update an edited product
+     */
+    public function update(ProductUpdateRequest $request, Product $product)
+    {
+        Product::query()
+            ->where('id', $product->id)
+            ->update($request->validated());
+
+        return to_route('product.index')->with([
+            'type' => 'success',
+            'message' => 'Product edited successfully'
         ]);
     }
 }

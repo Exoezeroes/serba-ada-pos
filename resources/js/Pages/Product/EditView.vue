@@ -31,7 +31,8 @@ const form = useForm({
 });
 
 const submit = () => {
-  console.log('hey hey not yet')
+  form.reset("buy_price");
+  form.patch(route("product.update", props.product));
 };
 </script>
 
