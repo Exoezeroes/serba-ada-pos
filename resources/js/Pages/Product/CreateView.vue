@@ -1,12 +1,15 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import {
+  mdiArrowULeftBottomBold,
   mdiArrowUpBoldBoxOutline,
   mdiArrowDownBoldBoxOutline,
   mdiBallotOutline,
   mdiBarcode,
   mdiFormatLetterCase,
   mdiNumeric,
+  mdiReloadAlert,
+  mdiSend,
 } from "@mdi/js";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
@@ -39,6 +42,15 @@ const submit = () => {
         :icon="mdiBallotOutline"
         title="Add Product"
         main
+      />
+      <BaseButton
+        :href="route('product.index')"
+        color="warning"
+        label="Return"
+        :icon="mdiArrowULeftBottomBold"
+        :disabled="form.processing"
+        class="mb-4"
+        outline
       />
       <CardBox isForm @submit.prevent="submit">
         <FormValidationErrors message="Something went wrong..." />
@@ -103,6 +115,7 @@ const submit = () => {
               type="submit"
               color="success"
               label="Submit"
+              :icon="mdiSend"
               :disabled="form.processing"
             />
             <BaseButton
@@ -110,6 +123,7 @@ const submit = () => {
               color="danger"
               outline
               label="Reset"
+              :icon="mdiReloadAlert"
               :disabled="form.processing"
             />
           </BaseButtons>
