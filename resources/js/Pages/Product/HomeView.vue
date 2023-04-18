@@ -33,7 +33,7 @@ const icon = computed(() => {
     return mdiCloseCircleOutline;
   }
   return mdiAlertCircleOutline;
-}); 
+});
 
 const productStore = useProductStore();
 
@@ -46,7 +46,12 @@ productStore.products = props.products;
     <ProductModal />
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiGridLarge" title="Items" main />
-      <NotificationBar v-if="message" :color="type" :icon="icon">
+      <NotificationBar
+        v-if="message"
+        :color="type"
+        :icon="icon"
+        :key="products.length"
+      >
         {{ message }}
       </NotificationBar>
       <BaseButton

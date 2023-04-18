@@ -66,4 +66,19 @@ class ProductController extends Controller
             'message' => 'Product edited successfully'
         ]);
     }
+
+    /**
+     * Delete a product
+     */
+    public function destroy(Product $product)
+    {
+        Product::query()
+            ->where('id', $product->id)
+            ->delete();
+
+        return to_route('product.index')->with([
+            'type' => 'warning',
+            'message' => 'Product has been trashed'
+        ]);
+    }
 }

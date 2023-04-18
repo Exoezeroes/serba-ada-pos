@@ -23,6 +23,12 @@ export const useProductStore = defineStore("product", {
     openModal(product) {
       this.modalActive = true;
       this.setProduct(product);
+    },
+    deleteProduct(product) {
+      if (!product.id) throw "The passed product does not have an id!";
+
+      const filteredProducts = this.products.filter( el => el.id !== product.id)
+      this.products = filteredProducts;
     }
   }
 })

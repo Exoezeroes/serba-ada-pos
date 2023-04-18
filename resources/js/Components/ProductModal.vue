@@ -1,14 +1,18 @@
 <script setup>
 import { useProductStore } from "@/Stores/product";
 import { mdiDelete, mdiPencil } from "@mdi/js";
-import BaseButton from "./BaseButton.vue";
 import BaseButtons from "./BaseButtons.vue";
+import LinkButton from "./LinkButton.vue";
 import CardBox from "@/Components/CardBox.vue";
 import CardBoxModal from "@/Components/CardBoxModal.vue";
 import ProductModalTable from "./ProductModalTable.vue";
 
 const productStore = useProductStore();
 const closeModal = () => (productStore.modalActive = false);
+const deleteProduct = () => {
+  productStore.deleteProduct(productStore.productActive);
+  closeModal();
+};
 </script>
 
 <template>
@@ -25,8 +29,15 @@ const closeModal = () => (productStore.modalActive = false);
         as="button"
         @click.prevent="closeModal"
       />
-
-      <BaseButton :icon="mdiDelete" color="danger" outline />
+      <LinkButton
+        :icon="mdiDelete"
+        color="danger"
+        outline
+        :href="route('product.destroy', productStore.productActive)"
+        as="button"
+        method="delete"
+        @click.prevent="deleteProduct"
+      />
     </BaseButtons>
     <CardBox has-table>
       <ProductModalTable :product="productStore.productActive" />
