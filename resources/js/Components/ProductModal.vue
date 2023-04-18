@@ -8,39 +8,36 @@ import CardBoxModal from "@/Components/CardBoxModal.vue";
 import ProductModalTable from "./ProductModalTable.vue";
 
 const productStore = useProductStore();
-const closeModal = () => (productStore.modalActive = false);
-const deleteProduct = () => {
-  productStore.deleteProduct(productStore.productActive);
-  closeModal();
-};
+
+const ActiveProduct = productStore.productActive
 </script>
 
 <template>
   <CardBoxModal
     v-model="productStore.modalActive"
-    :title="productStore.productActive.title"
+    :title="ActiveProduct.title"
   >
     <BaseButtons type="justify-between">
       <LinkButton
         :icon="mdiPencil"
         color="warning"
         outline
-        :href="route('product.edit', productStore.productActive)"
+        :href="route('product.edit', ActiveProduct)"
         as="button"
-        @click.prevent="closeModal"
+        @click.prevent="productStore.closeModal"
       />
       <LinkButton
         :icon="mdiDelete"
         color="danger"
         outline
-        :href="route('product.destroy', productStore.productActive)"
+        :href="route('product.destroy', ActiveProduct)"
         as="button"
         method="delete"
-        @click.prevent="deleteProduct"
+        @click.prevent="productStore.deleteProduct(ActiveProduct)"
       />
     </BaseButtons>
     <CardBox has-table>
-      <ProductModalTable :product="productStore.productActive" />
+      <ProductModalTable :product="ActiveProduct" />
     </CardBox>
   </CardBoxModal>
 </template>

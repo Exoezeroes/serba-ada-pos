@@ -78,7 +78,7 @@ class ProductController extends Controller
 
         return to_route('product.index')->with([
             'type' => 'warning',
-            'message' => 'Product has been trashed'
+            'message' => 'Product "'. $product->title . '" has been trashed'
         ]);
     }
 }
