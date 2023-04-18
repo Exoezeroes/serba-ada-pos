@@ -17,6 +17,7 @@ import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.
 import CardBox from "@/Components/CardBox.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import BaseButton from "@/Components/BaseButton.vue";
+import BaseDivider from "@/Components/BaseDivider.vue";
 import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
@@ -92,6 +93,9 @@ const submit = () => {
             required
           />
         </FormField>
+
+        <BaseDivider />
+
         <FormField
           label="Price"
           :help="`Modifying buy price is not allowed.

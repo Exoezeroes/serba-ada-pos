@@ -17,6 +17,7 @@ import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.
 import CardBox from "@/Components/CardBox.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import BaseButton from "@/Components/BaseButton.vue";
+import BaseDivider from "@/Components/BaseDivider.vue";
 import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
@@ -64,6 +65,7 @@ const submit = () => {
             required
           />
         </FormField>
+
         <FormField label="Title">
           <FormControl
             v-model="form.title"
@@ -72,6 +74,7 @@ const submit = () => {
             required
           />
         </FormField>
+
         <FormField label="Quantity" help="Positive number up to 4,294,967,295">
           <FormControl
             v-model="form.quantity"
@@ -84,6 +87,9 @@ const submit = () => {
             required
           />
         </FormField>
+
+        <BaseDivider />
+
         <FormField
           label="Buy / Sell Price"
           help="Full price per unit, e.g. 125,000"
