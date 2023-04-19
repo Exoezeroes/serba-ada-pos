@@ -7,9 +7,10 @@ import {
   mdiPlusCircleOutline,
   mdiTrashCan,
 } from "@mdi/js";
-import { Head, usePage, router } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
-import { computed, ref } from "vue";
+import { useRouteStore } from "@/Stores/route";
+import { computed } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -18,8 +19,8 @@ import ProductModal from "@/Components/ProductModal.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import NotificationBar from "@/Components/NotificationBar.vue";
-import SortButton from "@/Components/SortButton.vue";
 
+// props
 const props = defineProps({
   products: {
     type: Array,
@@ -27,6 +28,7 @@ const props = defineProps({
   },
 });
 
+// notifications
 const notificationType = computed(() => usePage().props.response.type);
 const notificationMessage = computed(() => usePage().props.response.message);
 const notificationIcon = computed(() => {
@@ -39,40 +41,24 @@ const notificationIcon = computed(() => {
   return mdiAlertCircleOutline;
 });
 
+// product store
 const productStore = useProductStore();
 productStore.products = props.products;
+const product = productStore.productActive;
 
-const ActiveProduct = productStore.productActive;
+// route store
+const routeStore = useRouteStore();
+const processing = computed(() => routeStore.processing);
 
-const processing = ref(false);
+// options
+const deleteProduct = { onSuccess: () => productStore.deleteProduct(product) };
+const closeModal = { onSuccess: () => productStore.closeModal() };
 
-const edit = () => {
-  router.visit(route("product.edit", ActiveProduct), {
-    onBefore: () => (processing.value = true),
-    onSuccess: () => productStore.closeModal(),
-    onFinish: () => (processing.value = false),
-  });
-};
-
-const trash = () => {
-  router.delete(route("product.trash", ActiveProduct), {
-    onBefore: () => (processing.value = true),
-    onSuccess: () => productStore.deleteProduct(ActiveProduct),
-    onFinish: () => (processing.value = false),
-  });
-};
-
-const productCreate = () => {
-  router.visit(route("product.create"), {
-    onBefore: () => (processing.value = true),
-  });
-};
-
-const productTrashed = () => {
-  router.visit(route("product.trashed"), {
-    onBefore: () => (processing.value = true),
-  });
-};
+// routes
+const create = () => routeStore.get("product.create");
+const edit = () => routeStore.get("product.edit", product, closeModal);
+const trash = () => routeStore.delete("product.trash", product, deleteProduct);
+const trashed = () => routeStore.get("product.trashed");
 </script>
 
 <template>
@@ -102,7 +88,7 @@ const productTrashed = () => {
           color="success"
           outline
           :disabled="processing"
-          @click.prevent="productCreate"
+          @click.prevent="create"
         />
 
         <BaseButton
@@ -111,7 +97,7 @@ const productTrashed = () => {
           color="danger"
           outline
           :disabled="processing"
-          @click.prevent="productTrashed"
+          @click.prevent="trashed"
         />
       </BaseButtons>
       <div

@@ -1,6 +1,7 @@
 <script setup>
-import { Head, useForm, router } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
+import { computed } from "vue";
+import { useRouteStore } from "@/Stores/route";
 import {
   mdiArrowULeftBottomBold,
   mdiArrowUpBoldBoxOutline,
@@ -23,6 +24,7 @@ import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
 
+// form
 const form = useForm({
   uid: "",
   title: "",
@@ -35,15 +37,12 @@ const submit = () => {
   form.post(route("product.store"));
 };
 
-const processing = ref(false);
-const isProcessing = computed(() => processing.value || form.processing);
+// route store
+const routeStore = useRouteStore();
+const processing = computed(() => routeStore.processing || form.processing);
 
-const productIndex = () => {
-  router.visit(route("product.index"), {
-    onBefore: () => (processing.value = true),
-    onFinish: () => (processing.value = false),
-  })
-}
+// routes
+const index = () => routeStore.get("product.index");
 </script>
 
 <template>
@@ -59,10 +58,10 @@ const productIndex = () => {
         color="warning"
         label="Return"
         :icon="mdiArrowULeftBottomBold"
-        :disabled="isProcessing"
+        :disabled="processing"
         class="mb-4"
         outline
-        @click.prevent="productIndex"
+        @click.prevent="index"
       />
       <CardBox isForm @submit.prevent="submit">
         <FormValidationErrors message="Something went wrong..." />
@@ -133,7 +132,7 @@ const productIndex = () => {
               color="success"
               label="Submit"
               :icon="mdiSend"
-              :disabled="isProcessing"
+              :disabled="processing"
             />
             <BaseButton
               type="reset"
@@ -141,7 +140,7 @@ const productIndex = () => {
               outline
               label="Reset"
               :icon="mdiReloadAlert"
-              :disabled="isProcessing"
+              :disabled="processing"
             />
           </BaseButtons>
         </template>

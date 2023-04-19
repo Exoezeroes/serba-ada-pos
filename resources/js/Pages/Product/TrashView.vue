@@ -1,15 +1,16 @@
 <script setup>
 import {
   mdiAlertCircleOutline,
+  mdiArrowULeftBottomBold,
   mdiCheckCircleOutline,
   mdiCloseCircleOutline,
   mdiRecycle,
-  mdiTrashCan,
 } from "@mdi/js";
-import { Head, usePage, router } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
 import { useModalStore } from "@/Stores/modal";
-import { computed, ref } from "vue";
+import { useRouteStore } from "@/Stores/route";
+import { computed } from "vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import ConfirmationModal from "@/Components/ConfirmationModal.vue";
@@ -19,8 +20,8 @@ import ProductCard from "@/Components/ProductCard.vue";
 import ProductModal from "@/Components/ProductModal.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import SortButton from "@/Components/SortButton.vue";
 
+// props
 const props = defineProps({
   products: {
     type: Array,
@@ -28,6 +29,7 @@ const props = defineProps({
   },
 });
 
+// notifications
 const type = computed(() => usePage().props.response.type);
 const message = computed(() => usePage().props.response.message);
 const icon = computed(() => {
@@ -40,42 +42,32 @@ const icon = computed(() => {
   return mdiAlertCircleOutline;
 });
 
+// product store
 const productStore = useProductStore();
-const ActiveProduct = productStore.productActive;
-
+const product = productStore.productActive;
 productStore.products = props.products;
 
+// modal store
 const modalStore = useModalStore();
 
 const deletes = () => {
   modalStore.activate();
 };
 
-const processing = ref(false);
+// route store
+const routeStore = useRouteStore();
+const processing = computed(() => routeStore.processing);
 
-const restore = () => {
-  router.visit(route("product.restore", ActiveProduct.id), {
-    method: "post",
-    onBefore: () => (processing.value = true),
-    onSuccess: () => productStore.deleteProduct(ActiveProduct),
-    onFinish: () => (processing.value = false),
-  });
-};
+// options
+const deleteProduct = { onSuccess: () => productStore.deleteProduct(product) };
 
-const confirmed = () => {
-  router.delete(route("product.destroy", ActiveProduct.id), {
-    onBefore: () => (processing.value = true),
-    onSuccess: () => productStore.deleteProduct(ActiveProduct),
-    onFinish: () => (processing.value = false),
-  });
-};
+// params
+const id = product.id;
 
-const productIndex = () => {
-  router.visit(route("product.index"), {
-    onBefore: () => (processing.value = true),
-    onFinish: () => (processing.value = false),
-  })
-}
+// routes
+const restore = () => routeStore.post("product.restore", id, deleteProduct);
+const destroy = () => routeStore.delete("product.destroy", id, deleteProduct);
+const index = () => routeStore.get("product.index");
 </script>
 
 <template>
@@ -95,7 +87,7 @@ const productIndex = () => {
       hasCancel
       buttonCancel="success"
       title="Are you sure?"
-      @confirm="confirmed"
+      @confirm="destroy"
     >
       This action is unrecoverable!
     </ConfirmationModal>
@@ -114,15 +106,13 @@ const productIndex = () => {
         {{ message }}
       </NotificationBar>
       <BaseButtons>
-
         <BaseButton
-          :icon="mdiTrashCan"
-          label="Trashed"
-          color="danger"
+          :icon="mdiArrowULeftBottomBold"
+          label="Return"
+          color="info"
           outline
-          active
           :disabled="processing"
-          @click.prevent="productIndex"
+          @click.prevent="index"
         />
       </BaseButtons>
       <div
