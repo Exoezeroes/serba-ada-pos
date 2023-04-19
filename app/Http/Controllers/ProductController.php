@@ -85,12 +85,27 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         Product::query()
-            ->where('id', $product->id)
+            ->find($product->id)
             ->delete();
 
         return to_route('product.index')->with([
             'type' => 'warning',
-            'message' => 'Product "'. $product->title . '" has been trashed'
+            'message' => 'Product "' . $product->title . '" has been trashed'
+        ]);
+    }
+
+    /**
+     * Restore a product
+     */
+    public function restore($id)
+    {
+        Product::onlyTrashed()
+            ->find($id)
+            ->restore();
+
+        return to_route('product.trash')->with([
+            'type' => 'success',
+            'message' => 'Product restored successfully'
         ]);
     }
 }

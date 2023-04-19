@@ -11,4 +11,5 @@ Route::prefix('/products')->group(function () {
     Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::patch('/{product}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+    Route::post('/{product}/restore', [ProductController::class, 'restore'])->name('product.restore');
 });

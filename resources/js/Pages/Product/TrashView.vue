@@ -6,7 +6,7 @@ import {
   mdiRecycle,
   mdiTrashCan,
 } from "@mdi/js";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
 import { computed } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
@@ -41,12 +41,17 @@ const icon = computed(() => {
 const productStore = useProductStore();
 
 productStore.products = props.products;
+
+const restore = async () => {
+  router.post(route("product.restore", productStore.productActive.id));
+  productStore.deleteProduct(productStore.productActive);
+};
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Trashed Products" />
-    <ProductModal hasCancel buttonLabel="Restore" />
+    <ProductModal hasCancel buttonLabel="Restore" @confirm="restore" />
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiRecycle"
