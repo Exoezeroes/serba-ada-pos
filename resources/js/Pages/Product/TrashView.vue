@@ -42,7 +42,7 @@ const productStore = useProductStore();
 
 productStore.products = props.products;
 
-const restore = async () => {
+const restore = () => {
   router.post(route("product.restore", productStore.productActive.id));
   productStore.deleteProduct(productStore.productActive);
 };
@@ -51,7 +51,7 @@ const restore = async () => {
 <template>
   <LayoutAuthenticated>
     <Head title="Trashed Products" />
-    <ProductModal hasCancel buttonLabel="Restore" @confirm="restore" />
+    <ProductModal canDelete hasCancel buttonLabel="Restore" @confirm="restore" />
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiRecycle"

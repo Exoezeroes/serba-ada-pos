@@ -1,8 +1,8 @@
 <script setup>
 import { useProductStore } from "@/Stores/product";
 import { mdiDelete, mdiPencil } from "@mdi/js";
+import BaseButton from "./BaseButton.vue";
 import BaseButtons from "./BaseButtons.vue";
-import LinkButton from "./LinkButton.vue";
 import CardBox from "@/Components/CardBox.vue";
 import CardBoxModal from "@/Components/CardBoxModal.vue";
 import ProductModalTable from "./ProductModalTable.vue";
@@ -21,7 +21,7 @@ const props = defineProps({
   hasCancel: Boolean,
 });
 
-const emit = defineEmits(["confirm"]);
+const emit = defineEmits(["confirm", "edit", "deletes"]);
 
 const editable = props.canEdit ? true : false;
 const deletable = props.canDelete ? true : false;
@@ -29,6 +29,18 @@ const deletable = props.canDelete ? true : false;
 const productStore = useProductStore();
 
 const ActiveProduct = productStore.productActive;
+
+const editTrash = (event) => {
+  productStore.closeModal();
+  emit(event);
+};
+
+const edit = () => {
+  editTrash("edit");
+};
+const deletes = () => {
+  editTrash("deletes");
+};
 </script>
 
 <template>
@@ -41,24 +53,19 @@ const ActiveProduct = productStore.productActive;
     @confirm="emit('confirm')"
   >
     <BaseButtons type="justify-between">
-      <LinkButton
+      <BaseButton
         v-if="editable"
-        :href="route('product.edit', ActiveProduct)"
         :icon="mdiPencil"
         color="warning"
-        as="button"
         outline
-        @click.prevent="productStore.closeModal"
+        @click.prevent="edit"
       />
-      <LinkButton
+      <BaseButton
         v-if="deletable"
-        :href="route('product.destroy', ActiveProduct)"
-        method="delete"
         :icon="mdiDelete"
         color="danger"
-        as="button"
         outline
-        @click.prevent="productStore.deleteProduct(ActiveProduct)"
+        @click.prevent="deletes"
       />
     </BaseButtons>
     <CardBox has-table>

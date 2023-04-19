@@ -7,7 +7,7 @@ import {
   mdiPlusCircleOutline,
   mdiTrashCan,
 } from "@mdi/js";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
 import { computed } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
@@ -27,36 +27,43 @@ const props = defineProps({
   },
 });
 
-const type = computed(() => usePage().props.response.type);
-const message = computed(() => usePage().props.response.message);
-const icon = computed(() => {
-  if (type.value === "success") {
+const notificationType = computed(() => usePage().props.response.type);
+const notificationMessage = computed(() => usePage().props.response.message);
+const notificationIcon = computed(() => {
+  if (notificationType.value === "success") {
     return mdiCheckCircleOutline;
   }
-  if (type.value === "danger") {
+  if (notificationType.value === "danger") {
     return mdiCloseCircleOutline;
   }
   return mdiAlertCircleOutline;
 });
 
 const productStore = useProductStore();
-
 productStore.products = props.products;
+
+const ActiveProduct = productStore.productActive;
+
+const edit = () => router.get(route("product.edit", ActiveProduct));
+const deletes = () => {
+  productStore.deleteProduct(ActiveProduct);
+  router.delete(route("product.destroy", ActiveProduct));
+};
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Products" />
-    <ProductModal canEdit canDelete />
+    <ProductModal canEdit @edit="edit" canDelete @deletes="deletes" />
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiGridLarge" title="Products" main />
       <NotificationBar
-        v-if="message"
-        :color="type"
-        :icon="icon"
+        v-if="notificationMessage"
+        :color="notificationType"
+        :icon="notificationIcon"
         :key="products.length"
       >
-        {{ message }}
+        {{ notificationMessage }}
       </NotificationBar>
       <BaseButtons>
         <BaseButton
