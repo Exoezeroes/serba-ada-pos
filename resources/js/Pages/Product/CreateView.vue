@@ -1,5 +1,6 @@
 <script setup>
 import { Head, useForm, router } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 import {
   mdiArrowULeftBottomBold,
   mdiArrowUpBoldBoxOutline,
@@ -33,6 +34,16 @@ const form = useForm({
 const submit = () => {
   form.post(route("product.store"));
 };
+
+const processing = ref(false);
+const isProcessing = computed(() => processing.value || form.processing);
+
+const productIndex = () => {
+  router.visit(route("product.index"), {
+    onBefore: () => (processing.value = true),
+    onFinish: () => (processing.value = false),
+  })
+}
 </script>
 
 <template>
@@ -45,13 +56,13 @@ const submit = () => {
         main
       />
       <BaseButton
-        routeName="product.index"
         color="warning"
         label="Return"
         :icon="mdiArrowULeftBottomBold"
-        :disabled="form.processing"
+        :disabled="isProcessing"
         class="mb-4"
         outline
+        @click.prevent="productIndex"
       />
       <CardBox isForm @submit.prevent="submit">
         <FormValidationErrors message="Something went wrong..." />
@@ -122,7 +133,7 @@ const submit = () => {
               color="success"
               label="Submit"
               :icon="mdiSend"
-              :disabled="form.processing"
+              :disabled="isProcessing"
             />
             <BaseButton
               type="reset"
@@ -130,7 +141,7 @@ const submit = () => {
               outline
               label="Reset"
               :icon="mdiReloadAlert"
-              :disabled="form.processing"
+              :disabled="isProcessing"
             />
           </BaseButtons>
         </template>

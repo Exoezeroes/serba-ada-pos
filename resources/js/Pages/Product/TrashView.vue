@@ -61,6 +61,7 @@ const restore = () => {
     onFinish: () => (processing.value = false),
   });
 };
+
 const confirmed = () => {
   router.delete(route("product.destroy", ActiveProduct.id), {
     onBefore: () => (processing.value = true),
@@ -68,6 +69,13 @@ const confirmed = () => {
     onFinish: () => (processing.value = false),
   });
 };
+
+const productIndex = () => {
+  router.visit(route("product.index"), {
+    onBefore: () => (processing.value = true),
+    onFinish: () => (processing.value = false),
+  })
+}
 </script>
 
 <template>
@@ -106,14 +114,15 @@ const confirmed = () => {
         {{ message }}
       </NotificationBar>
       <BaseButtons>
-        <SortButton />
+
         <BaseButton
-          routeName="product.index"
           :icon="mdiTrashCan"
           label="Trashed"
           color="danger"
           outline
           active
+          :disabled="processing"
+          @click.prevent="productIndex"
         />
       </BaseButtons>
       <div

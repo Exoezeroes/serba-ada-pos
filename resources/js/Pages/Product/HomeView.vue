@@ -44,7 +44,6 @@ productStore.products = props.products;
 
 const ActiveProduct = productStore.productActive;
 
-
 const processing = ref(false);
 
 const edit = () => {
@@ -60,6 +59,18 @@ const trash = () => {
     onBefore: () => (processing.value = true),
     onSuccess: () => productStore.deleteProduct(ActiveProduct),
     onFinish: () => (processing.value = false),
+  });
+};
+
+const productCreate = () => {
+  router.visit(route("product.create"), {
+    onBefore: () => (processing.value = true),
+  });
+};
+
+const productTrashed = () => {
+  router.visit(route("product.trashed"), {
+    onBefore: () => (processing.value = true),
   });
 };
 </script>
@@ -86,19 +97,21 @@ const trash = () => {
       </NotificationBar>
       <BaseButtons>
         <BaseButton
-          routeName="product.create"
           :icon="mdiPlusCircleOutline"
           label="Add Product"
           color="success"
           outline
+          :disabled="processing"
+          @click.prevent="productCreate"
         />
-        <SortButton />
+
         <BaseButton
-          routeName="product.trashed"
           :icon="mdiTrashCan"
           label="Trashed"
           color="danger"
           outline
+          :disabled="processing"
+          @click.prevent="productTrashed"
         />
       </BaseButtons>
       <div
