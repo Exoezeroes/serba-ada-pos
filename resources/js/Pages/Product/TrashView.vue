@@ -8,15 +8,17 @@ import {
 } from "@mdi/js";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
+import { useModalStore } from "@/Stores/modal";
 import { computed } from "vue";
-import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
-import SectionMain from "@/Components/SectionMain.vue";
-import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import ProductCard from "@/Components/ProductCard.vue";
-import ProductModal from "@/Components/ProductModal.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
+import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import NotificationBar from "@/Components/NotificationBar.vue";
+import ProductCard from "@/Components/ProductCard.vue";
+import ProductModal from "@/Components/ProductModal.vue";
+import SectionMain from "@/Components/SectionMain.vue";
+import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import SortButton from "@/Components/SortButton.vue";
 
 const props = defineProps({
@@ -48,9 +50,15 @@ const restore = () => {
   productStore.deleteProduct(ActiveProduct);
 };
 
+const modalStore = useModalStore();
+
 const deletes = () => {
-  router.delete(route("product.destroy", ActiveProduct.id));
-  productStore.deleteProduct(ActiveProduct);
+  modalStore.activate();
+};
+const confirmed = () => {
+  router.delete(route("product.destroy", ActiveProduct.id), {
+    onSuccess: () => productStore.deleteProduct(ActiveProduct),
+  });
 };
 </script>
 
@@ -64,6 +72,16 @@ const deletes = () => {
       @deletes="deletes"
       @confirm="restore"
     />
+    <ConfirmationModal
+      button="danger"
+      buttonLabel="Delete"
+      hasCancel
+      buttonCancel="success"
+      title="Are you sure?"
+      @confirm="confirmed"
+    >
+      This action is unrecoverable!
+    </ConfirmationModal>
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiRecycle"
