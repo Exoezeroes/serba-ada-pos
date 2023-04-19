@@ -30,16 +30,16 @@ const productStore = useProductStore();
 
 const ActiveProduct = productStore.productActive;
 
-const editTrash = (event) => {
+const editDelete = (event) => {
   productStore.closeModal();
   emit(event);
 };
 
 const edit = () => {
-  editTrash("edit");
+  editDelete("edit");
 };
 const deletes = () => {
-  editTrash("deletes");
+  editDelete("deletes");
 };
 </script>
 

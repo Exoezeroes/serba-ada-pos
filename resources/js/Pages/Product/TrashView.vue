@@ -39,19 +39,31 @@ const icon = computed(() => {
 });
 
 const productStore = useProductStore();
+const ActiveProduct = productStore.productActive;
 
 productStore.products = props.products;
 
 const restore = () => {
-  router.post(route("product.restore", productStore.productActive.id));
-  productStore.deleteProduct(productStore.productActive);
+  router.post(route("product.restore", ActiveProduct.id));
+  productStore.deleteProduct(ActiveProduct);
+};
+
+const deletes = () => {
+  router.delete(route("product.destroy", ActiveProduct.id));
+  productStore.deleteProduct(ActiveProduct);
 };
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Trashed Products" />
-    <ProductModal canDelete hasCancel buttonLabel="Restore" @confirm="restore" />
+    <ProductModal
+      buttonLabel="Restore"
+      hasCancel
+      canDelete
+      @deletes="deletes"
+      @confirm="restore"
+    />
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiRecycle"

@@ -21,39 +21,27 @@ class ProductController extends Controller
     }
 
     /**
-     * Show all soft deleted products
-     */
-    public function trash()
-    {
-        $products = Product::onlyTrashed()->get();
-
-        return Inertia::render('Product/TrashView', [
-            'products' => $products,
-        ]);
-    }
-
-    /**
      * Show create product form
      */
     public function create()
     {
         return Inertia::render('Product/CreateView');
     }
-
+    
     /**
      * Store a created product
      */
     public function store(ProductStoreRequest $request)
     {
         Product::query()
-            ->create($request->validated());
-
+        ->create($request->validated());
+        
         return to_route('product.index')->with([
             'type' => 'success',
             'message' => 'Product added successfully'
         ]);
     }
-
+    
     /**
      * Show edit product form
      */
@@ -63,31 +51,31 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
-
+    
     /**
      * Update an edited product
      */
     public function update(ProductUpdateRequest $request, Product $product)
     {
         Product::query()
-            ->where('id', $product->id)
-            ->update($request->validated());
-
+        ->where('id', $product->id)
+        ->update($request->validated());
+        
         return to_route('product.index')->with([
             'type' => 'success',
             'message' => 'Product edited successfully'
         ]);
     }
-
+    
     /**
-     * Delete a product
+     * Soft delete a product
      */
-    public function destroy(Product $product)
+    public function trash(Product $product)
     {
         Product::query()
-            ->find($product->id)
-            ->delete();
-
+        ->find($product->id)
+        ->delete();
+        
         return to_route('product.index')->with([
             'type' => 'warning',
             'message' => 'Product "' . $product->title . '" has been trashed'
@@ -95,9 +83,21 @@ class ProductController extends Controller
     }
 
     /**
+     * Show all soft deleted products
+     */
+    public function trashed()
+    {
+        $products = Product::onlyTrashed()->get();
+
+        return Inertia::render('Product/TrashView', [
+            'products' => $products,
+        ]);
+    }
+    
+    /**
      * Restore a product
      */
-    public function restore($id)
+    public function restore(String $id)
     {
         Product::onlyTrashed()
             ->find($id)
@@ -106,6 +106,19 @@ class ProductController extends Controller
         return to_route('product.trash')->with([
             'type' => 'success',
             'message' => 'Product restored successfully'
+        ]);
+    }
+
+    /**
+     * Delete a product permanently
+     */
+    public function destroy(String $id)
+    {
+        Product::onlyTrashed()->find($id)->forceDelete();
+
+        return to_route('product.trashed')->with([
+            'type' => 'danger',
+            'message' => 'Product has been deleted permanently.'
         ]);
     }
 }

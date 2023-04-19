@@ -45,16 +45,16 @@ productStore.products = props.products;
 const ActiveProduct = productStore.productActive;
 
 const edit = () => router.get(route("product.edit", ActiveProduct));
-const deletes = () => {
+const trash = () => {
   productStore.deleteProduct(ActiveProduct);
-  router.delete(route("product.destroy", ActiveProduct));
+  router.delete(route("product.trash", ActiveProduct));
 };
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Products" />
-    <ProductModal canEdit @edit="edit" canDelete @deletes="deletes" />
+    <ProductModal canEdit @edit="edit" canDelete @deletes="trash" />
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiGridLarge" title="Products" main />
       <NotificationBar
@@ -75,7 +75,7 @@ const deletes = () => {
         />
         <SortButton />
         <BaseButton
-          routeName="product.trash"
+          routeName="product.trashed"
           :icon="mdiTrashCan"
           label="Trashed"
           color="danger"
