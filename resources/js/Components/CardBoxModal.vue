@@ -30,6 +30,7 @@ const props = defineProps({
     type: [String, Number, Boolean],
     default: null,
   },
+  disabled: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "cancel", "confirm"]);
@@ -82,13 +83,14 @@ const styleStore = useStyleStore();
 
       <template #footer>
         <BaseButtons>
-          <BaseButton :label="buttonLabel" :color="button" @click="confirm" />
+          <BaseButton :label="buttonLabel" :color="button" @click="confirm" :disabled="disabled" />
           <BaseButton
             v-if="hasCancel"
             label="Cancel"
             :color="buttonCancel"
             outline
             @click="cancel"
+            :disabled="disabled"
           />
         </BaseButtons>
       </template>

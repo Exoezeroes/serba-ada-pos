@@ -19,6 +19,7 @@ const props = defineProps({
     default: "Done",
   },
   hasCancel: Boolean,
+  disabledButtons: Boolean,
 });
 
 const emit = defineEmits(["confirm", "edit", "deletes"]);
@@ -31,7 +32,6 @@ const productStore = useProductStore();
 const ActiveProduct = productStore.productActive;
 
 const editDelete = (event) => {
-  productStore.closeModal();
   emit(event);
 };
 
@@ -51,6 +51,7 @@ const deletes = () => {
     :buttonLabel="buttonLabel"
     :hasCancel="hasCancel"
     @confirm="emit('confirm')"
+    :disabled="disabledButtons"
   >
     <BaseButtons type="justify-between">
       <BaseButton
@@ -59,6 +60,7 @@ const deletes = () => {
         color="warning"
         outline
         @click.prevent="edit"
+        :disabled="disabledButtons"
       />
       <BaseButton
         v-if="deletable"
@@ -66,6 +68,7 @@ const deletes = () => {
         color="danger"
         outline
         @click.prevent="deletes"
+        :disabled="disabledButtons"
       />
     </BaseButtons>
     <CardBox has-table>

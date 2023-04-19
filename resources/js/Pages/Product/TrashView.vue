@@ -9,7 +9,7 @@ import {
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
 import { useModalStore } from "@/Stores/modal";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import ConfirmationModal from "@/Components/ConfirmationModal.vue";
@@ -46,8 +46,10 @@ const ActiveProduct = productStore.productActive;
 productStore.products = props.products;
 
 const restore = () => {
-  router.post(route("product.restore", ActiveProduct.id));
-  productStore.deleteProduct(ActiveProduct);
+  router.visit(route("product.restore", ActiveProduct.id), {
+    method: "post",
+    onSuccess: () => productStore.deleteProduct(ActiveProduct),
+  });
 };
 
 const modalStore = useModalStore();
@@ -55,9 +57,14 @@ const modalStore = useModalStore();
 const deletes = () => {
   modalStore.activate();
 };
+
+const processing = ref(false);
+
 const confirmed = () => {
   router.delete(route("product.destroy", ActiveProduct.id), {
+    onBefore: () => (processing.value = true),
     onSuccess: () => productStore.deleteProduct(ActiveProduct),
+    onFinish: () => (processing.value = false),
   });
 };
 </script>
@@ -71,6 +78,7 @@ const confirmed = () => {
       canDelete
       @deletes="deletes"
       @confirm="restore"
+      :disabledButtons="processing"
     />
     <ConfirmationModal
       button="danger"

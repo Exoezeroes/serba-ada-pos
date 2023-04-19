@@ -9,7 +9,7 @@ import {
 } from "@mdi/js";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { useProductStore } from "@/Stores/product";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -44,17 +44,36 @@ productStore.products = props.products;
 
 const ActiveProduct = productStore.productActive;
 
-const edit = () => router.get(route("product.edit", ActiveProduct));
+
+const processing = ref(false);
+
+const edit = () => {
+  router.visit(route("product.edit", ActiveProduct), {
+    onBefore: () => (processing.value = true),
+    onSuccess: () => productStore.closeModal(),
+    onFinish: () => (processing.value = false),
+  });
+};
+
 const trash = () => {
-  productStore.deleteProduct(ActiveProduct);
-  router.delete(route("product.trash", ActiveProduct));
+  router.delete(route("product.trash", ActiveProduct), {
+    onBefore: () => (processing.value = true),
+    onSuccess: () => productStore.deleteProduct(ActiveProduct),
+    onFinish: () => (processing.value = false),
+  });
 };
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Products" />
-    <ProductModal canEdit @edit="edit" canDelete @deletes="trash" />
+    <ProductModal
+      canEdit
+      @edit="edit"
+      canDelete
+      @deletes="trash"
+      :disabledButtons="processing"
+    />
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiGridLarge" title="Products" main />
       <NotificationBar
