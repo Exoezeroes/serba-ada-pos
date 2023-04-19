@@ -103,7 +103,7 @@ class ProductController extends Controller
             ->find($id)
             ->restore();
 
-        return to_route('product.trash')->with([
+        return to_route('product.trashed')->with([
             'type' => 'success',
             'message' => 'Product restored successfully'
         ]);
