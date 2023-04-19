@@ -45,13 +45,6 @@ const ActiveProduct = productStore.productActive;
 
 productStore.products = props.products;
 
-const restore = () => {
-  router.visit(route("product.restore", ActiveProduct.id), {
-    method: "post",
-    onSuccess: () => productStore.deleteProduct(ActiveProduct),
-  });
-};
-
 const modalStore = useModalStore();
 
 const deletes = () => {
@@ -60,6 +53,14 @@ const deletes = () => {
 
 const processing = ref(false);
 
+const restore = () => {
+  router.visit(route("product.restore", ActiveProduct.id), {
+    method: "post",
+    onBefore: () => (processing.value = true),
+    onSuccess: () => productStore.deleteProduct(ActiveProduct),
+    onFinish: () => (processing.value = false),
+  });
+};
 const confirmed = () => {
   router.delete(route("product.destroy", ActiveProduct.id), {
     onBefore: () => (processing.value = true),
