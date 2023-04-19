@@ -45,7 +45,7 @@ const submit = () => {
         main
       />
       <BaseButton
-        :href="route('product.index')"
+        routeName="product.index"
         color="warning"
         label="Return"
         :icon="mdiArrowULeftBottomBold"
