@@ -25,8 +25,7 @@ const modalStore = useModalStore();
     :buttonCancel="buttonCancel"
     @confirm="emit('confirm')"
     @cancel="emit('cancel')"
-    
   >
-  <slot />
+    <slot />
   </CardBoxModal>
 </template>

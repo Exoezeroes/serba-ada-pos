@@ -13,10 +13,12 @@ import {
 import { Head, useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
 import { useRouteStore } from "@/Stores/route";
+import { useModalStore } from "@/Stores/modal";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import CardBox from "@/Components/CardBox.vue";
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseDivider from "@/Components/BaseDivider.vue";
@@ -29,6 +31,13 @@ const props = defineProps({
   product: { type: Object, required: true },
 });
 
+// modal store
+const modalStore = useModalStore();
+
+const confirm = () => {
+  modalStore.activate();
+};
+
 // form
 const form = useForm({
   uid: props.product.uid,
@@ -38,7 +47,9 @@ const form = useForm({
   sell_price: props.product.sell_price,
 });
 
-const submit = () => {
+const submit = () => (form.sell_price < form.buy_price ? confirm() : post());
+
+const post = () => {
   form.reset("buy_price");
   form.patch(route("product.update", props.product));
 };
@@ -54,6 +65,15 @@ const index = () => routeStore.get("product.index");
 <template>
   <LayoutAuthenticated>
     <Head title="Edit Product" />
+    <ConfirmationModal
+      button="warning"
+      buttonLabel="Confirm"
+      hasCancel
+      title="Are you sure?"
+      @confirm="post"
+    >
+      The sell price entered is lower than the buy price!
+    </ConfirmationModal>
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiBallotOutline"

@@ -27,7 +27,7 @@ class ProductUpdateRequest extends FormRequest
             'title' => ['required'],
             'quantity' => ['required', 'integer', 'min:1', 'max: 4294967295'],
             'buy_price' => ['required', 'integer', 'min:1', 'max: 4294967295'],
-            'sell_price' => ['required', 'integer', 'gte:buy_price', 'min:1', 'max: 4294967295'],
+            'sell_price' => ['required', 'integer', 'min:1', 'max: 4294967295'],
         ];
     }
 }

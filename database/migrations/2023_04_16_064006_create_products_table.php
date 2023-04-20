@@ -28,11 +28,11 @@ return new class extends Migration
         });
 
         // sell price must be larger than buy price
-        DB::statement(
-            'ALTER TABLE products 
-            ADD CONSTRAINT chk_sell_price 
-            CHECK (sell_price >= buy_price);'
-        );
+        // DB::statement(
+        //     'ALTER TABLE products 
+        //     ADD CONSTRAINT chk_sell_price 
+        //     CHECK (sell_price >= buy_price);'
+        // );
     }
 
     /**

@@ -13,16 +13,25 @@ import {
   mdiReloadAlert,
   mdiSend,
 } from "@mdi/js";
-import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
-import SectionMain from "@/Components/SectionMain.vue";
-import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+import { useModalStore } from "@/Stores/modal";
 import CardBox from "@/Components/CardBox.vue";
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseDivider from "@/Components/BaseDivider.vue";
 import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
+import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
+import SectionMain from "@/Components/SectionMain.vue";
+import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+
+// modal store
+const modalStore = useModalStore();
+
+const confirm = () => {
+  modalStore.activate();
+};
 
 // form
 const form = useForm({
@@ -33,7 +42,9 @@ const form = useForm({
   sell_price: "",
 });
 
-const submit = () => {
+const submit = () => (form.sell_price < form.buy_price ? confirm() : post());
+
+const post = () => {
   form.post(route("product.store"));
 };
 
@@ -48,6 +59,15 @@ const index = () => routeStore.get("product.index");
 <template>
   <LayoutAuthenticated>
     <Head title="Add Product" />
+    <ConfirmationModal
+      button="warning"
+      buttonLabel="Confirm"
+      hasCancel
+      title="Are you sure?"
+      @confirm="post"
+    >
+      The sell price entered is lower than the buy price!
+    </ConfirmationModal>
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiBallotOutline"
