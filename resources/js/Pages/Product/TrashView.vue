@@ -20,6 +20,7 @@ import ProductCard from "@/Components/ProductCard.vue";
 import ProductModal from "@/Components/ProductModal.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+import ProductSortButton from "@/Components/ProductSortButton.vue";
 
 // props
 const props = defineProps({
@@ -107,13 +108,14 @@ const index = () => routeStore.get("product.index");
       </NotificationBar>
       <BaseButtons>
         <BaseButton
-          :icon="mdiArrowULeftBottomBold"
-          label="Return"
-          color="info"
-          outline
-          :disabled="processing"
-          @click.prevent="index"
+        :icon="mdiArrowULeftBottomBold"
+        label="Return"
+        color="success"
+        outline
+        :disabled="processing"
+        @click.prevent="index"
         />
+        <ProductSortButton :options="productStore.sortOptions" />
       </BaseButtons>
       <div
         class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 md:text-sm text-xs lg:text-base gap-2 lg:grid-cols-5"

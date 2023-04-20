@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::query()->get();
+        $products = Product::query()->orderBy('uid')->get();
         return Inertia::render('Product/HomeView', [
             'products' => $products,
         ]);
@@ -27,21 +27,21 @@ class ProductController extends Controller
     {
         return Inertia::render('Product/CreateView');
     }
-    
+
     /**
      * Store a created product
      */
     public function store(ProductStoreRequest $request)
     {
         Product::query()
-        ->create($request->validated());
-        
+            ->create($request->validated());
+
         return to_route('product.index')->with([
             'type' => 'success',
             'message' => 'Product added successfully'
         ]);
     }
-    
+
     /**
      * Show edit product form
      */
@@ -51,31 +51,31 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
-    
+
     /**
      * Update an edited product
      */
     public function update(ProductUpdateRequest $request, Product $product)
     {
         Product::query()
-        ->where('id', $product->id)
-        ->update($request->validated());
-        
+            ->where('id', $product->id)
+            ->update($request->validated());
+
         return to_route('product.index')->with([
             'type' => 'success',
             'message' => 'Product edited successfully'
         ]);
     }
-    
+
     /**
      * Soft delete a product
      */
     public function trash(Product $product)
     {
         Product::query()
-        ->find($product->id)
-        ->delete();
-        
+            ->find($product->id)
+            ->delete();
+
         return to_route('product.index')->with([
             'type' => 'warning',
             'message' => 'Product "' . $product->title . '" has been trashed'
@@ -87,13 +87,13 @@ class ProductController extends Controller
      */
     public function trashed()
     {
-        $products = Product::onlyTrashed()->get();
+        $products = Product::onlyTrashed()->orderBy('uid')->get();
 
         return Inertia::render('Product/TrashView', [
             'products' => $products,
         ]);
     }
-    
+
     /**
      * Restore a product
      */

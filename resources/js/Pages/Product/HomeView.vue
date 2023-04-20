@@ -19,6 +19,7 @@ import ProductModal from "@/Components/ProductModal.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import NotificationBar from "@/Components/NotificationBar.vue";
+import SortButton from "@/Components/ProductSortButton.vue";
 
 // props
 const props = defineProps({
@@ -90,7 +91,7 @@ const trashed = () => routeStore.get("product.trashed");
           :disabled="processing"
           @click.prevent="create"
         />
-
+        <SortButton :options="productStore.sortOptions" />
         <BaseButton
           :icon="mdiTrashCan"
           label="Trashed"
