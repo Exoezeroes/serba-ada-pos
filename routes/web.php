@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('SalesView');
+    // return Inertia::render('SalesView');
+    return to_route('dashboard');
 })->name('sales');
 
 require __DIR__ . '/auth.php';

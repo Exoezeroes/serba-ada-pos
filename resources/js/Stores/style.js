@@ -17,7 +17,7 @@ export const useStyleStore = defineStore("style", {
     overlayStyle: "",
 
     /* Dark mode */
-    darkMode: true,
+    darkMode: false,
   }),
   actions: {
     setStyle(payload) {
