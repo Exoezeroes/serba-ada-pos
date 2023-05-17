@@ -11,12 +11,15 @@
 |
 */
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    // return Inertia::render('SalesView');
-    return to_route('dashboard');
+    $products = Product::query()->orderBy('uid')->get(['id', 'uid', 'title', 'sell_price', 'quantity']);
+    return Inertia::render('SalesView', [
+        'products' => $products,
+    ]);
 })->name('sales');
 
 require __DIR__ . '/auth.php';
